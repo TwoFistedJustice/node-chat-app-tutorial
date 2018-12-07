@@ -41,8 +41,28 @@ io.on ('connection', (socket) => {
     io.emit ('newMessage', {
       from: message.from,
       text: message.text,
-      createAt: new Date ().getTime ()
+      createAt: new Date().getTime()
     });
+    
+    
+    socket.emit('newMessage', {
+      from: 'Darth Admin',
+      text: 'Welcome to the Sith Chat App',
+      createAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+      from: message.from,
+      createAt: new Date().getTime()
+    });
+
+    
+    // .broadcast() emits to every user except the one broadcasting
+      // socket.broadcast.emit('newMessage', {
+      //   from: message.from,
+      //   text: message.text,
+      //   createAt: new Date().getTime()
+      // });
   });
   socket.on ('disconnect', () => {
     console.log ('Disonnected from client -- server.js io.on()');

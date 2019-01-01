@@ -14,7 +14,7 @@ var app = express ();
 var server = http.createServer (app); // will be passed into socketIO()
 var io = socketIO (server);
 
-const {generateMessage} = require('./utils/message');
+const {generateMessage} = require ('./utils/message');
 
 app.use (express.static (publicPath));
 
@@ -22,29 +22,21 @@ io.on ('connection', (socket) => {
   // console.log(socket);
   console.log ('New user connected -- server.js io.on()');
   
-  socket.emit('newEmail', generateMessage('joe@example.com', 'a cuppa joe in the morning'));
+  // socket.emit ('newMessage', generateMessage ('larry@larrysusedcars.com', 'It is better to have loved and lost than to have financed a used car.'));
   
-  socket.emit('newMessage', generateMessage('larry@larrysusedcars.com', 'It is better to have loved and lost than to have financed a used car.' ));
-  
+  socket.broadcast.emit ('newMessage', generateMessage('Admin', 'New user joined'));
   
   // this listens for a new message from index.html, then broadcasts it , via io.emit to all connections
-  socket.on ('createMessage', (message) => {
-  console.log ('createMessage:', message);
+  socket.on('createMessage', (message, callback) => {
     
-    io.emit('createMessage', generateMessage(message.from, message.text));
     
-  socket.emit('newMessage', generateMessage('Darth Admin', 'Welcome to the Sith Chat App'));
+    console.log ('createMessage:', message);
+    io.emit ('newMessage', generateMessage (message.from, message.text));
   
-
-    socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
-    
-    // .broadcast() emits to every user except the one broadcasting
-      // socket.broadcast.emit('newMessage', {
-      //   from: message.from,
-      //   text: message.text,
-      //   createAt: new Date().getTime()
-      // });
+    callback('This is from the server, and is normally an object'); // acknowledgement
+  
   });
+  
   socket.on ('disconnect', () => {
     console.log ('Disonnected from client -- server.js io.on()');
   })

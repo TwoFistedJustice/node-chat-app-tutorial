@@ -1,3 +1,4 @@
+//https://www.google.com/maps?q={latitude},{longtitude}
 const path = require ('path'); //node module which normalizes convoluted paths
 const express = require ('express');
 const http = require ('http'); // required to use socket.io with express
@@ -14,7 +15,7 @@ var app = express ();
 var server = http.createServer (app); // will be passed into socketIO()
 var io = socketIO (server);
 
-const {generateMessage} = require ('./utils/message');
+const {generateMessage, generateLocationMessage} = require ('./utils/message');
 
 app.use (express.static (publicPath));
 
@@ -34,8 +35,11 @@ io.on ('connection', (socket) => {
     io.emit ('newMessage', generateMessage (message.from, message.text));
   
     callback('This is from the server, and is normally an object'); // acknowledgement
-  
   });
+  
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+  })
   
   socket.on ('disconnect', () => {
     console.log ('Disonnected from client -- server.js io.on()');

@@ -34,7 +34,8 @@ io.on ('connection', (socket) => {
     console.log ('createMessage:', message);
     io.emit ('newMessage', generateMessage (message.from, message.text));
   
-    callback('This is from the server, and is normally an object'); // acknowledgement
+    // callback('This is from the server, and is normally an object'); // acknowledgement
+    callback(''); // acknowledgement
   });
   
   socket.on('createLocationMessage', (coords) => {

@@ -3,22 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Socket IO Section 9 Node Chat App</title>
-    <script src="js/libs/jquery-3.3.1.min.js"></script>
-
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-<h3><a href="  https://serene-sea-29396.herokuapp.com/" target="_blank">THE APP ON HEROKU</a></h3>
-<p>Welcome to the chat app</p>
-<ol id="messages"> </ol>
+<body class="chat">
 
-<form id="message-form">
-    <input name="message" type="text" placeholder="Message"/>
-    <button>Send</button>
-</form>
-<button id="send-location">Send Location</button>
+<div class="chat__sidebar">
+    <h3>Peeples</h3>
+    <div id="users"></div>
+</div>
 
-<script src = "/socket.io/socket.io.js"></script>
+<div class="chat__main">
+    <h3><a href="  https://serene-sea-29396.herokuapp.com/" target="_blank">THE APP ON HEROKU</a></h3>
+    <ol id="messages" class="chat__messages"></ol>
+
+    <div class="chat__footer">
+        <form id="message-form">
+            <!--autofocus does what you would think it does-->
+            <input name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
+            <button>Send</button>
+            <button id="send-location">Send Location</button>
+        </form>
+    </div>
+
+
+
+
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
 <script src="/js/libs/jquery-3.3.1.min.js"></script>
-<script src = "/js/index.js"></script>
+<script src="/js/index.js"></script>
 </body>
 </html>

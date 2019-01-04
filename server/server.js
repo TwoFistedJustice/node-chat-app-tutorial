@@ -3,6 +3,7 @@ const path = require ('path'); //node module which normalizes convoluted paths
 const express = require ('express');
 const http = require ('http'); // required to use socket.io with express
 const socketIO = require ('socket.io');
+const moment = require('moment');
 
 
 const publicPath = path.join (__dirname, '../public');
@@ -16,6 +17,13 @@ var server = http.createServer (app); // will be passed into socketIO()
 var io = socketIO (server);
 
 const {generateMessage, generateLocationMessage} = require ('./utils/message');
+
+
+var face = '◎[▪‿▪]◎';
+var face2 = '(づ｡◕‿‿◕｡)づ';
+var space27 = '                    ';
+
+
 
 app.use (express.static (publicPath));
 
@@ -31,7 +39,7 @@ io.on ('connection', (socket) => {
   socket.on('createMessage', (message, callback) => {
     
     
-    console.log ('createMessage:', message);
+    console.log (face2, 'createMessage:', message);
     io.emit ('newMessage', generateMessage (message.from, message.text));
   
     // callback('This is from the server, and is normally an object'); // acknowledgement

@@ -1,8 +1,10 @@
-var socket = io (); // this creates our connection and the name is important
+var socket = io(); // this creates our connection and the name is important
+
+
+
 var face = '◎[▪‿▪]◎';
 var face2 = '(づ｡◕‿‿◕｡)づ';
 var space27 = '                    ';
-
 var acknowledgement = function(data) {
   console.log ('Acknowledgment of message received!', data);
 };
@@ -23,9 +25,12 @@ socket.on('newEmail', function(dataReceived){
 
 
 socket.on('newMessage', function(message) {
-  console.log(`New message received.${space27}${face2}\\n${space27}-- index.js`, message);
+  // console.log(`New message received.${space27}${face2}\\n${space27}-- index.js`, message);
+  
+  var formattedTime = moment(message.createdAt).format('h:mm a');
+  // var formattedTime = 'moment';
   var li = jQuery('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
   
   jQuery('#messages').append(li);
 });
@@ -43,11 +48,11 @@ socket.on('newMessage', function(message) {
 // }, acknowledgement);
 
 socket.on('newLocationMessage', function(message){
-  
+  var formattedTime = moment().format('h:mm a');
   var li = jQuery('<li></li>');
   var a = jQuery('<a target="_blank">My current location</a>');
   
-  li.text(`${message.from}: `);
+  li.text(`${message.from} ${formattedTime}: `);
   a.attr('href', message.url);
   
   li.append(a);

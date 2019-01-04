@@ -25,14 +25,20 @@ socket.on('newEmail', function(dataReceived){
 
 
 socket.on('newMessage', function(message) {
-  // console.log(`New message received.${space27}${face2}\\n${space27}-- index.js`, message);
-  
+  var template = jQuery('#message-template').html();
   var formattedTime = moment(message.createdAt).format('h:mm a');
-  // var formattedTime = 'moment';
-  var li = jQuery('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
-  
-  jQuery('#messages').append(li);
+  var html = Mustache.render(template, {
+    from: message.from,
+    text: message.text,
+    createdAt: formattedTime
+    
+  });
+  jQuery('#messages').append(html);
+  // console.log(`New message received.${space27}${face2}\\n${space27}-- index.js`, message);
+  // var formattedTime = moment(message.createdAt).format('h:mm a');
+  // var li = jQuery('<li></li>');
+  // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  // jQuery('#messages').append(li);
 });
 
 // if you use acknowledgments, you MUST use it in every instance of the socket emitter, or else it will not work in any of them
@@ -49,14 +55,24 @@ socket.on('newMessage', function(message) {
 
 socket.on('newLocationMessage', function(message){
   var formattedTime = moment().format('h:mm a');
-  var li = jQuery('<li></li>');
-  var a = jQuery('<a target="_blank">My current location</a>');
   
-  li.text(`${message.from} ${formattedTime}: `);
-  a.attr('href', message.url);
+  var template = jQuery('#location-message-template').html();
+  var html = Mustache.render(template, {
+    from: message.from,
+    url: message.url,
+    createdAt: formattedTime
+  });
+  jQuery('#messages').append(html);
+
   
-  li.append(a);
-  jQuery('#messages').append(li);
+  // var li = jQuery('<li></li>');
+  // var a = jQuery('<a target="_blank">My current location</a>');
+  //
+  // li.text(`${message.from} ${formattedTime}: `);
+  // a.attr('href', message.url);
+  //
+  // li.append(a);
+  // jQuery('#messages').append(li);
 });
 
 

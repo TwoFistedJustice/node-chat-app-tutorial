@@ -1,6 +1,30 @@
 var socket = io(); // this creates our connection and the name is important
 
-
+var scrollToBottom = function() {
+  //see video 9-16
+  // Selectors
+  var messages = jQuery('#messages');
+  var newMessage = messages.children('li:last-child');
+  // Heights
+  var clientHeight = messages.prop('clientHeight'); //always a fixed value for a given viewport
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();
+  
+  if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight);
+  }
+  //   console.log(face2, 'should scroll');
+  //   console.log(`${face2}
+  //   \n clientHeight: ${clientHeight}
+  //   \n scrollTop: ${scrollTop}
+  //   \nnewMessageHeight: ${newMessageHeight}
+  //   \n lastMessageHeight: ${lastMessageHeight}
+  //   \n scrollHeight: ${scrollHeight}`);
+  // };
+  
+};
 
 var face = '◎[▪‿▪]◎';
 var face2 = '(づ｡◕‿‿◕｡)づ';
@@ -34,6 +58,7 @@ socket.on('newMessage', function(message) {
     
   });
   jQuery('#messages').append(html);
+  scrollToBottom();
   // console.log(`New message received.${space27}${face2}\\n${space27}-- index.js`, message);
   // var formattedTime = moment(message.createdAt).format('h:mm a');
   // var li = jQuery('<li></li>');
@@ -63,7 +88,7 @@ socket.on('newLocationMessage', function(message){
     createdAt: formattedTime
   });
   jQuery('#messages').append(html);
-
+  scrollToBottom();
   
   // var li = jQuery('<li></li>');
   // var a = jQuery('<a target="_blank">My current location</a>');

@@ -16,13 +16,13 @@ var scrollToBottom = function() {
     messages.scrollTop(scrollHeight);
   }
   //   console.log(face2, 'should scroll');
-  //   console.log(`${face2}
-  //   \n clientHeight: ${clientHeight}
-  //   \n scrollTop: ${scrollTop}
-  //   \nnewMessageHeight: ${newMessageHeight}
-  //   \n lastMessageHeight: ${lastMessageHeight}
-  //   \n scrollHeight: ${scrollHeight}`);
-  // };
+    console.log(`${face2}
+    \n clientHeight: ${clientHeight}
+    \n scrollTop: ${scrollTop}
+    \nnewMessageHeight: ${newMessageHeight}
+    \n lastMessageHeight: ${lastMessageHeight}
+    \n scrollHeight: ${scrollHeight}`);
+  
   
 };
 

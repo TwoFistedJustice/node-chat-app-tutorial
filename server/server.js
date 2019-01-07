@@ -35,7 +35,7 @@ io.on ('connection', (socket) => {
   
   socket.broadcast.emit ('newMessage', generateMessage('Admin', 'New user joined'));
   
-  // this listens for a new message from index.html, then broadcasts it , via io.emit to all connections
+  // this listens for a new message from chat.html, then broadcasts it , via io.emit to all connections
   socket.on('createMessage', (message, callback) => {
     
     

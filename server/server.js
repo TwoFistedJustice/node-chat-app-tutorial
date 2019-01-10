@@ -1,10 +1,13 @@
 //https://www.google.com/maps?q={latitude},{longtitude}
 const path = require ('path'); //node module which normalizes convoluted paths
-const express = require ('express');
 const http = require ('http'); // required to use socket.io with express
+const express = require ('express');
 const socketIO = require ('socket.io');
-const moment = require('moment');
+const moment = require ('moment');
 
+const {generateMessage, generateLocationMessage} = require ('./utils/message');
+const {isRealString} = require ('./utils/validation');
+const {Users} = require('./utils/users');
 
 const publicPath = path.join (__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -16,13 +19,11 @@ var app = express ();
 var server = http.createServer (app); // will be passed into socketIO()
 var io = socketIO (server);
 
-const {generateMessage, generateLocationMessage} = require ('./utils/message');
-
+var users = new Users();
 
 var face = '◎[▪‿▪]◎';
 var face2 = '(づ｡◕‿‿◕｡)づ';
 var space27 = '                    ';
-
 
 
 app.use (express.static (publicPath));
@@ -31,27 +32,53 @@ io.on ('connection', (socket) => {
   // console.log(socket);
   console.log ('New user connected -- server.js io.on()');
   
-  // socket.emit ('newMessage', generateMessage ('larry@larrysusedcars.com', 'It is better to have loved and lost than to have financed a used car.'));
-  
-  socket.broadcast.emit ('newMessage', generateMessage('Admin', 'New user joined'));
+  socket.on ('join', (params, callback) => {
+    if (!isRealString (params.name) || !(isRealString (params.room))) {
+      return callback ('name and room name are required');
+    }
+    
+    socket.join (params.room);
+    // to prevent duplicate users and to prevent them from being in more than one room
+    // I actually think this call is pointless because the socket id changes with every refresh
+    users.removeUser(socket.id);
+    users.addUser(socket.id, params.name, params.room)
+    
+    io.to(params.room).emit('upateUserList', users.getUserList(params.room));
+    
+    // socket.leave('BSG Fans);
+    // io.emit -> io.to('BSG Fans').emit(...)
+    // socket.emit
+    
+    socket.emit ('newMessage', generateMessage ('Admin', `Welcome to the chat app ${params.name}. You have joined ${params.room}`));
+    socket.broadcast.to(params.room).emit ('newMessage', generateMessage ('Admin', `${params.name} has joined`));
+    
+    callback ();
+  });
   
   // this listens for a new message from chat.html, then broadcasts it , via io.emit to all connections
-  socket.on('createMessage', (message, callback) => {
-    
+  socket.on ('createMessage', (message, callback) => {
     
     console.log (face2, 'createMessage:', message);
     io.emit ('newMessage', generateMessage (message.from, message.text));
-  
+    
     // callback('This is from the server, and is normally an object'); // acknowledgement
-    callback(''); // acknowledgement
+    callback (''); // acknowledgement
   });
   
-  socket.on('createLocationMessage', (coords) => {
-    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+  socket.on ('createLocationMessage', (coords) => {
+    io.emit ('newLocationMessage', generateLocationMessage ('Admin', coords.latitude, coords.longitude));
   })
   
   socket.on ('disconnect', () => {
     console.log ('Disonnected from client -- server.js io.on()');
+    var user = users.removeUser(socket.id);
+    
+    if (user) {
+      //emit to everyone connected
+      io.to(user.room).emit('upateUserList', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
+    }
+    
   })
   
 });

@@ -16,14 +16,12 @@ var scrollToBottom = function() {
     messages.scrollTop(scrollHeight);
   }
   //   console.log(face2, 'should scroll');
-    console.log(`${face2}
-    \n clientHeight: ${clientHeight}
-    \n scrollTop: ${scrollTop}
-    \nnewMessageHeight: ${newMessageHeight}
-    \n lastMessageHeight: ${lastMessageHeight}
-    \n scrollHeight: ${scrollHeight}`);
-  
-  
+  //   console.log(`${face2}
+  //   \n clientHeight: ${clientHeight}
+  //   \n scrollTop: ${scrollTop}
+  //   \nnewMessageHeight: ${newMessageHeight}
+  //   \n lastMessageHeight: ${lastMessageHeight}
+  //   \n scrollHeight: ${scrollHeight}`);
 };
 
 var face = '◎[▪‿▪]◎';
@@ -34,19 +32,39 @@ var acknowledgement = function(data) {
 };
 
 //mustn't use arrow functions in client side bc not all browsers support it.
-socket.on ('connect', function() {
+socket.on('connect', function() {
   console.log (`Connected to server${space27}${face2}\n${space27}-- index.js`);
+  var params = jQuery.deparam(window.location.search);
+  
+  socket.emit('join', params, function(err) {
+    if (err){
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log(face2, `no error`);
+    }
+  });
+  
 });
 
 
-socket.on ('disconnect', function () {
+socket.on('disconnect', function () {
   console.log (`Disconnected from server${space27}${face2}\\n${space27}-- index.js`);
+});
+
+socket.on('upateUserList', function(users){
+  console.log(face2, 'line 58 Users List:', users);
+  var ol = jQuery('<ol></ol>');
+  
+  users.forEach(function(user){
+    ol.append(jQuery('<li></li>').text(user));
+  });
+  jQuery('#users').html(ol);
 });
 
 socket.on('newEmail', function(dataReceived){
   console.log(`New email!${space27}${face2}\n${space27}-- index.js`, dataReceived);
 });
-
 
 socket.on('newMessage', function(message) {
   var template = jQuery('#message-template').html();

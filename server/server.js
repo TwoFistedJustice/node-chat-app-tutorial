@@ -58,15 +58,25 @@ io.on ('connection', (socket) => {
   // this listens for a new message from chat.html, then broadcasts it , via io.emit to all connections
   socket.on ('createMessage', (message, callback) => {
     
-    console.log (face2, 'createMessage:', message);
-    io.emit ('newMessage', generateMessage (message.from, message.text));
+    var user = users.getUser(socket.id);
+    if (user && isRealString(message.text)) {
+      // console.log (face2, 'createMessage:', message);
+      // io.emit ('newMessage', generateMessage (message.from, message.text));
+      io.to(user.room).emit ('newMessage', generateMessage (user.name, message.text));
+    }
+    
     
     // callback('This is from the server, and is normally an object'); // acknowledgement
     callback (''); // acknowledgement
   });
   
   socket.on ('createLocationMessage', (coords) => {
-    io.emit ('newLocationMessage', generateLocationMessage ('Admin', coords.latitude, coords.longitude));
+    var user = users.getUser(socket.id);
+    
+    if (user) {
+      io.to(user.room).emit ('newLocationMessage', generateLocationMessage (user.name, coords.latitude, coords.longitude));
+    }
+    
   })
   
   socket.on ('disconnect', () => {

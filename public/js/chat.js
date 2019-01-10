@@ -53,7 +53,7 @@ socket.on('disconnect', function () {
 });
 
 socket.on('upateUserList', function(users){
-  console.log(face2, 'line 58 Users List:', users);
+  console.log(face2, 'line 5* Users List:', users);
   var ol = jQuery('<ol></ol>');
   
   users.forEach(function(user){
@@ -124,7 +124,7 @@ jQuery('#message-form').on('submit', function(e){
   
   var messageTextbox = jQuery('[name=message]');
   socket.emit('createMessage', {
-    from: 'User',
+    // from: 'User',
     text: messageTextbox.val()
   }, function(){
     console.log('acknowledgement from jquery form select');

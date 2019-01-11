@@ -6,8 +6,8 @@ const socketIO = require ('socket.io');
 const moment = require ('moment');
 
 const {generateMessage, generateLocationMessage} = require ('./utils/message');
-const {isRealString, capitalize} = require ('./utils/validation');
-const {Users} = require('./utils/users');
+const {isRealString, isUniqueUser, capitalize} = require ('./utils/validation');
+const {Users} = require ('./utils/users');
 
 const publicPath = path.join (__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -19,7 +19,7 @@ var app = express ();
 var server = http.createServer (app); // will be passed into socketIO()
 var io = socketIO (server);
 
-var users = new Users();
+var users = new Users ();
 
 var face = '◎[▪‿▪]◎';
 var face2 = '(づ｡◕‿‿◕｡)づ';
@@ -35,22 +35,24 @@ io.on ('connection', (socket) => {
   socket.on ('join', (params, callback) => {
     if (!isRealString (params.name) || !(isRealString (params.room))) {
       return callback ('name and room name are required');
+    } else if (!isUniqueUser(params.name, users.getAllUsers())) {
+      return callback('name must be uniqe')
     }
-    params.room = capitalize(params.room);
+    params.room = capitalize (params.room);
     socket.join (params.room);
     // to prevent duplicate users and to prevent them from being in more than one room
     // I actually think this call is pointless because the socket id changes with every refresh
-    users.removeUser(socket.id);
-    users.addUser(socket.id, params.name, params.room)
+    users.removeUser (socket.id);
+    users.addUser (socket.id, params.name, params.room)
     
-    io.to(params.room).emit('upateUserList', users.getUserList(params.room));
+    io.to (params.room).emit ('upateUserList', users.getUserList (params.room));
     
     // socket.leave('BSG Fans);
     // io.emit -> io.to('BSG Fans').emit(...)
     // socket.emit
     
     socket.emit ('newMessage', generateMessage ('Admin', `Welcome to the chat app ${params.name}. You have joined ${params.room}`));
-    socket.broadcast.to(params.room).emit ('newMessage', generateMessage ('Admin', `${params.name} has joined`));
+    socket.broadcast.to (params.room).emit ('newMessage', generateMessage ('Admin', `${params.name} has joined`));
     
     callback ();
   });
@@ -58,11 +60,11 @@ io.on ('connection', (socket) => {
   // this listens for a new message from chat.html, then broadcasts it , via io.emit to all connections
   socket.on ('createMessage', (message, callback) => {
     
-    var user = users.getUser(socket.id);
-    if (user && isRealString(message.text)) {
+    var user = users.getUser (socket.id);
+    if (user && isRealString (message.text)) {
       // console.log (face2, 'createMessage:', message);
       // io.emit ('newMessage', generateMessage (message.from, message.text));
-      io.to(user.room).emit ('newMessage', generateMessage (user.name, message.text));
+      io.to (user.room).emit ('newMessage', generateMessage (user.name, message.text));
     }
     
     
@@ -71,22 +73,22 @@ io.on ('connection', (socket) => {
   });
   
   socket.on ('createLocationMessage', (coords) => {
-    var user = users.getUser(socket.id);
+    var user = users.getUser (socket.id);
     
     if (user) {
-      io.to(user.room).emit ('newLocationMessage', generateLocationMessage (user.name, coords.latitude, coords.longitude));
+      io.to (user.room).emit ('newLocationMessage', generateLocationMessage (user.name, coords.latitude, coords.longitude));
     }
     
   })
   
   socket.on ('disconnect', () => {
     console.log ('Disonnected from client -- server.js io.on()');
-    var user = users.removeUser(socket.id);
+    var user = users.removeUser (socket.id);
     
     if (user) {
       //emit to everyone connected
-      io.to(user.room).emit('upateUserList', users.getUserList(user.room));
-      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
+      io.to (user.room).emit ('upateUserList', users.getUserList (user.room));
+      io.to (user.room).emit ('newMessage', generateMessage ('Admin', `${user.name} has left`));
     }
     
   })

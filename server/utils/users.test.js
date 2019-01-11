@@ -37,7 +37,7 @@ describe ('Users', () => {
   expect(users.getUserList('React course')).toEqual(res);
   })
   
-  it ('should remove a user', () => {
+  it ('should remove a specified user', () => {
     var changed = [
       {id: '1', name: 'Manny', room: 'Node course'},
       {id: '2', name: 'Moe', room: 'React course'}
@@ -50,7 +50,7 @@ describe ('Users', () => {
     expect(users.users.length).toBe(2);
   });
   
-  it ('should not remove user', () => {
+  it ('should not remove any user when given a name not in the array', () => {
    //assert array has not changed
     var expected = [
       {id: '1', name: 'Manny', room: 'Node course'},
@@ -63,18 +63,32 @@ describe ('Users', () => {
   })
 
   // getUser()
-  it ('should find user', () => {
+  it ('should find a specified user', () => {
      var userId = '2';
      var res = users.getUser(userId);
      expect(res.id).toEqual(userId);
 
   });
 
-  it ('should not find user', () => {
+  it ('should not find user not in the array', () => {
      var res = users.getUser('A');
      expect(res).toNotExist();
      expect(users.users.length).toBe(3);
   });
 
+  // getAllUsers()
+  it ('should return a list of all users in all rooms', () => {
+    var expected = ['Manny', 'Moe', 'Jack'];
+    expect(users.getAllUsers()).toExist();
+    expect(users.getAllUsers().length).toBe(3);
+    expect(users.getAllUsers()).toEqual(expected);
+  });
+  
+  it ('should return an array of strings', () => {
+    expect(users.getAllUsers()).toBeAn('array');
+    expect(users.getAllUsers().every((name) => typeof(name) === 'string')).toBe(true);
+  });
+  
+  
   
 });

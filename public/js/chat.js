@@ -36,6 +36,7 @@ socket.on('connect', function() {
   console.log (`Connected to server${space27}${face2}\n${space27}-- index.js`);
   var params = jQuery.deparam(window.location.search);
   
+  //validation is not added here because it adds unnecessary complexity due to browser/ES5 limitations
   socket.emit('join', params, function(err) {
     if (err){
       alert(err);

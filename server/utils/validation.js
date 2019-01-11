@@ -3,6 +3,13 @@ var isRealString = (str) => {
 };
 
 
+// expects name to be a string and namesArray to be an array of strings
+var isUniqueUser = (name, namesArray) => {
+  // if some are the same, return false, if none are the same return true
+  return !namesArray.some((existingUser) => name.toLowerCase() === existingUser.toLowerCase())
+};
+
+
 var capitalize = (str) => {
   var res = str.trim().toLowerCase().split('');
   res[0] = res[0].toUpperCase();
@@ -10,7 +17,9 @@ var capitalize = (str) => {
 };
 
 
-module.exports = {isRealString, capitalize};
+
+
+module.exports = {isRealString, isUniqueUser, capitalize};
 
 
 

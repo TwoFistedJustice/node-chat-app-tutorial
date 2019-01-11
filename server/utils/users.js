@@ -36,12 +36,19 @@ class Users {
   return this.users.filter((user)=> user.id === id )[0];
   }
   
+  // returns an array of all user names in a given room
   getUserList(room){
     // return an array of string names // reduce?
     var users = this.users.filter((user) => user.room === room);
     var namesArray = users.map((user) => user.name );
     return namesArray;
   }
+  
+  // returns an array of all user names independent of room
+  getAllUsers() {
+    return this.users.map((user)=> user.name);
+  }
+  
   
 };
 

@@ -1,5 +1,6 @@
 const expect = require('expect');
-var {isRealString, capitalize} = require('./validation');
+const {Users} = require ('./users');
+var {isRealString, isUniqueUser ,capitalize} = require('./validation');
 
 
 describe('input string validation', () => {
@@ -44,6 +45,40 @@ describe('input string validation', () => {
 });
 
 
+
+describe('Unique User Name Validation', () => {
+// isUniqueUser returns true if a user is unique
+  var users;
+  var userList;
+  beforeEach(() => {
+    users = new Users();
+    users.users = [
+      {id: '1', name: 'Manny', room: 'Node course'},
+      {id: '2', name: 'Moe', room: 'React course'},
+      {id: '3', name: 'Jack', room: 'Node course'}
+    ];
+    
+    userList = users.getAllUsers()
+
+  });
+
+  // it should return a boolean
+  it('it should return a boolean', () => {
+    expect(isUniqueUser('Shemp', userList)).toBeA('boolean');
+  });
+
+  // 'it should not reject a unique user'
+  it('it should not reject a unique user SHEMP', () => {
+    expect(isUniqueUser('Shemp', userList)).toBe(true);
+  });
+
+  // 'it should reject a user name already in use'
+  it('it should reject a user name already in use MOE', () => {
+    expect(isUniqueUser('Moe', userList)).toBe(false);
+  });
+});
+
+
 describe('Capitalize strings', () => {
 
   it('should capitalize the first character of a lower case string', () => {
@@ -61,7 +96,6 @@ describe('Capitalize strings', () => {
   it('should trim leading and ending spaces', () => {
   expect(capitalize('  le  ')).toBe('Le');
   })
-  
   
 });
 

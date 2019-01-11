@@ -1,5 +1,5 @@
 const expect = require('expect');
-var {isRealString} = require('./validation');
+var {isRealString, capitalize} = require('./validation');
 
 
 describe('input string validation', () => {
@@ -41,6 +41,28 @@ describe('input string validation', () => {
     expect(isRealString()).toBe(false);
     expect(isRealString(NaN)).toBe(false);
   })
+});
+
+
+describe('Capitalize strings', () => {
+
+  it('should capitalize the first character of a lower case string', () => {
+    expect(capitalize('le')).toBe('Le');
+  });
+  
+  it('should capitalize the first character of an upper case string', () => {
+    expect(capitalize('LE')).toBe('Le');
+  });
+  
+  it('should capitalize the first character of a mixed  case string', () => {
+    expect(capitalize('leTtEr')).toBe('Letter');
+  });
+  
+  it('should trim leading and ending spaces', () => {
+  expect(capitalize('  le  ')).toBe('Le');
+  })
+  
+  
 });
 
 

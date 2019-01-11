@@ -6,7 +6,7 @@ const socketIO = require ('socket.io');
 const moment = require ('moment');
 
 const {generateMessage, generateLocationMessage} = require ('./utils/message');
-const {isRealString} = require ('./utils/validation');
+const {isRealString, capitalize} = require ('./utils/validation');
 const {Users} = require('./utils/users');
 
 const publicPath = path.join (__dirname, '../public');
@@ -36,7 +36,7 @@ io.on ('connection', (socket) => {
     if (!isRealString (params.name) || !(isRealString (params.room))) {
       return callback ('name and room name are required');
     }
-    
+    params.room = capitalize(params.room);
     socket.join (params.room);
     // to prevent duplicate users and to prevent them from being in more than one room
     // I actually think this call is pointless because the socket id changes with every refresh

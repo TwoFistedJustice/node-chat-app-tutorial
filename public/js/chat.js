@@ -97,6 +97,7 @@ socket.on('newMessage', function(message) {
 // }, acknowledgement);
 
 socket.on('newLocationMessage', function(message){
+  console.log('NEW LOCATION MESSAGE');
   var formattedTime = moment().format('h:mm a');
   
   var template = jQuery('#location-message-template').html();

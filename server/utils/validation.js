@@ -3,8 +3,16 @@ var isRealString = (str) => {
 };
 
 
+var capitalize = (str) => {
+  var res = str.trim().toLowerCase().split('');
+  res[0] = res[0].toUpperCase();
+  return res.join('');
+};
 
-module.exports = {isRealString};
+console.log(capitalize('fart'));
+
+
+module.exports = {isRealString, capitalize};
 
 
 

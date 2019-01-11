@@ -9,8 +9,6 @@ var capitalize = (str) => {
   return res.join('');
 };
 
-console.log(capitalize('fart'));
-
 
 module.exports = {isRealString, capitalize};
 

@@ -36,7 +36,7 @@ io.on ('connection', (socket) => {
     if (!isRealString (params.name) || !(isRealString (params.room))) {
       return callback ('name and room name are required');
     } else if (!isUniqueUser(params.name, users.getAllUsers())) {
-      return callback('name must be uniqe')
+      return callback('name must be unique');
     }
     params.room = capitalize (params.room);
     socket.join (params.room);

@@ -8,6 +8,7 @@ const moment = require ('moment');
 const {generateMessage, generateLocationMessage} = require ('./utils/message');
 const {isRealString, isUniqueUser, capitalize} = require ('./utils/validation');
 const {Users} = require ('./utils/users');
+const {getRoomsList} = require('./utils/rooms');
 
 const publicPath = path.join (__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -46,6 +47,7 @@ io.on ('connection', (socket) => {
     users.addUser (socket.id, params.name, params.room)
     
     io.to (params.room).emit ('upateUserList', users.getUserList (params.room));
+    io.emit('updateRoomsList', getRoomsList(io.sockets.adapter.rooms));
     
     // socket.leave('BSG Fans);
     // io.emit -> io.to('BSG Fans').emit(...)
@@ -67,7 +69,6 @@ io.on ('connection', (socket) => {
       io.to (user.room).emit ('newMessage', generateMessage (user.name, message.text));
     }
     
-    
     // callback('This is from the server, and is normally an object'); // acknowledgement
     callback (''); // acknowledgement
   });
@@ -78,7 +79,6 @@ io.on ('connection', (socket) => {
     if (user) {
       io.to (user.room).emit ('newLocationMessage', generateLocationMessage (user.name, coords.latitude, coords.longitude));
     }
-    
   })
   
   socket.on ('disconnect', () => {
@@ -88,19 +88,18 @@ io.on ('connection', (socket) => {
     if (user) {
       //emit to everyone connected
       io.to (user.room).emit ('upateUserList', users.getUserList (user.room));
+      io.emit('updateRoomsList', getRoomsList(io.sockets.adapter.rooms));
       io.to (user.room).emit ('newMessage', generateMessage ('Admin', `${user.name} has left`));
     }
-    
   })
-  
 });
-
 
 console.log ('__dirname', __dirname);
 console.log ('old way: ', __dirname + '/../public');
 console.log ('node path module way:', publicPath);
 
-
 server.listen (port, () => {
   console.log (`Listening on port ${port}`);
 });
+
+

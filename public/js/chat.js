@@ -54,7 +54,7 @@ socket.on('disconnect', function () {
 });
 
 socket.on('upateUserList', function(users){
-  console.log(face2, 'line 5* Users List:', users);
+  // console.log(face2, 'line 5* Users List:', users);
   var ol = jQuery('<ol></ol>');
   
   users.forEach(function(user){
@@ -62,6 +62,17 @@ socket.on('upateUserList', function(users){
   });
   jQuery('#users').html(ol);
 });
+
+socket.on('updateRoomsList', function(rooms){
+  console.log('line 67 updating rooms list', rooms);
+  var ul = jQuery('<ul></ul>');
+  rooms.forEach(function(room){
+    ul.append(jQuery('<li></li>').text(room));
+  });
+  jQuery('#rooms').html(ul);
+  
+});
+
 
 socket.on('newEmail', function(dataReceived){
   console.log(`New email!${space27}${face2}\n${space27}-- index.js`, dataReceived);

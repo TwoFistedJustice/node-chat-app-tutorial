@@ -27,6 +27,12 @@ h3 {
     font-size: 1.5rem
 }
 
+h5 {
+    font-weight: 200;
+    text-align: center;
+    font-size: 1.0rem
+}
+
 button {
     background: #265f82;
     cursor: pointer;
@@ -104,7 +110,7 @@ button:disabled {
     padding: 10px
 }
 
-.chat__sidebar h3 {
+.chat__sidebar h3, h5 {
     color: #e6eaee;
     margin: 10px 20px;
     text-align: left

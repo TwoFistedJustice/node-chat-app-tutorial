@@ -31,7 +31,12 @@ app.use (express.static (publicPath));
 
 io.on ('connection', (socket) => {
   // console.log(socket);
+  socket.emit('newConnection', getRoomsList(io.sockets.adapter.rooms));
+  
   console.log ('New user connected -- server.js io.on()');
+  if (getRoomsList(io.sockets.adapter.rooms).length > 0){
+    console.log('rooms are available to join');
+  }
   
   socket.on ('join', (params, callback) => {
     if (!isRealString (params.name) || !(isRealString (params.room))) {
@@ -102,4 +107,6 @@ server.listen (port, () => {
   console.log (`Listening on port ${port}`);
 });
 
+
+// exports.server = http.listen(port)
 

@@ -1,25 +1,5 @@
 var socket = io ();
 
-//add a unique event listener that listens for a rooms list update
-// but this doesn't get called every time user list update
-// this is only used while the log in page is displayed
-// the event is only emitted on initial connection
-
-
-// the event listener updates the room selection drop down
-
-// on clicking a selection, a join event is emitted, similar to
-// when a user types a new room name
-
-// get basic drop down populated from an array
-
-//  connect server, but only to fetch the rooms list
-
-// pass in rooms list - fill dropdown from that
-
-// when user
-
-
 $ (document).ready (function () {
   
   // decorate the dropdown when disabled

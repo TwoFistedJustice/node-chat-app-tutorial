@@ -16,4 +16,10 @@ var getRoomsList = (rooms) => {
 };
 
 
+
+
+
+
+
+
 module.exports = {getRoomsList};

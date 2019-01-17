@@ -12,16 +12,8 @@ var roomConstants = {
   "Not safe for work": true
 };
 
-
 var getRoomsList = (rooms) => {
-  // var roomsList = [];
   var roomsList = Object.keys(roomConstants);
-  
-  // for(room in rooms) {
-  //   if(!rooms[room].sockets.hasOwnProperty(room)) {
-  //     roomsList.push(room);
-  //   }
-  // }
   
   for(room in rooms) {
     if(!roomConstants.hasOwnProperty(room) && !rooms[room].sockets.hasOwnProperty(room)) {

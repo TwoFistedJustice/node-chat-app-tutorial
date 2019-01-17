@@ -36,38 +36,40 @@ $(document).ready(function(){
     return elem === document.activeElement && ( elem.type || elem.href );
   };
   
+  var dropdown = $('#room-drop-down');
+  var roomTextBox = $('#room-text');
+  var checkBox = $('#because-its-easier-thats-why');
+  
+  
+  
   for (var i =0; i < list.length; i++){
     $(dropdown).append($("<option / >").val(list[i]).text(list[i]));
   }
   
   
-  $('#because-its-easier-thats-why').change(function(){
+  checkBox.change(function(){
     
-    if($('#because-its-easier-thats-why').is(':checked')){
+    if((checkBox).is(':checked')){
       
-      $('#room-text').prop('disabled', false);
-      $('#room-drop-down').prop('disabled', true);
+      roomTextBox.prop('disabled', false);
+      dropdown.prop('disabled', true);
     } else {
-      $('#room-drop-down').prop('disabled', false);
-      $('#room-text').prop('disabled', true);
+      dropdown.prop('disabled', false);
+      roomTextBox.prop('disabled', true);
     }
-    
-    
   })
-
   
+  roomTextBox.click(function(){
   
-  $('#room-text').click(function(){
-    
-    $('#room-text').prop('name', "room");
-    $('#room-drop-down').prop('name', false);
+    roomTextBox.prop('name', "room");
+    dropdown.prop('name', false);
   });
   
   
-  $('#room-drop-down').click(function(){
-    
-    $('#room-drop-down').prop('name', "room");
-    $('#room-text').prop('name', false);
+  dropdown.click(function(){
+  
+    dropdown.prop('name', "room");
+    roomTextBox.prop('name', false);
     
   });
   

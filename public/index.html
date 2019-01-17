@@ -21,9 +21,19 @@
         </div>
 
         <div class="form-field">
-            <label>Room name</label>
-            <input type="text" name="room">room</>
+
+            <span><input type="checkbox" id="because-its-easier-thats-why"> Check box to</span>
+            <label>Make New Room</label>
+            <input type="text" id="room-text" disabled></>
         </div>
+
+      <div class="form-field">
+          <label>Or select to join</label>
+          <!--<select id="room-drop-down" name="select">-->
+          <select id="room-drop-down">
+              <option value="none">Rooms</option>
+          </select>
+      </div>
 
         <div class="form-field">
             <button>Join</button>
@@ -31,5 +41,8 @@
     </form>
     
 </div>
+
+<script src="/js/libs/jquery-3.3.1.min.js"></script>
+<script src="/js/index.js"></script>
 </body>
 </html>

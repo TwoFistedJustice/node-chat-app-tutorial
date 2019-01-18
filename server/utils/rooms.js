@@ -24,4 +24,4 @@ var getRoomsList = (rooms) => {
   return roomsList;
 };
 
-module.exports = {getRoomsList};
+module.exports = {getRoomsList, roomConstants};

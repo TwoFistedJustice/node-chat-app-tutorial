@@ -22,7 +22,7 @@ beforeEach((done) => {
 });
 
 describe('get rooms list from socket.io', (done) => {
-  it ('should get the rooms list', (done) => {
+  it ('should get the rooms list from server', (done) => {
     socket.on ('updateRoomsList', (data) => {
       expect(data).toBeAn('array');
       expect (data).toEqual(rooms)

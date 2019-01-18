@@ -33,10 +33,10 @@ io.on ('connection', (socket) => {
   // console.log(socket);
   socket.emit('newConnection', getRoomsList(io.sockets.adapter.rooms));
   
-  console.log ('New user connected -- server.js io.on()');
-  if (getRoomsList(io.sockets.adapter.rooms).length > 0){
-    console.log('rooms are available to join');
-  }
+  // console.log ('New user connected -- server.js io.on()');
+  // if (getRoomsList(io.sockets.adapter.rooms).length > 0){
+  //   console.log('rooms are available to join');
+  // }
   
   socket.on ('join', (params, callback) => {
     if (!isRealString (params.name) || !(isRealString (params.room))) {
@@ -63,6 +63,7 @@ io.on ('connection', (socket) => {
     
     callback ();
   });
+  
   
   // this listens for a new message from chat.html, then broadcasts it , via io.emit to all connections
   socket.on ('createMessage', (message, callback) => {
@@ -94,7 +95,7 @@ io.on ('connection', (socket) => {
       //emit to everyone connected
       io.to (user.room).emit ('upateUserList', users.getUserList (user.room));
       io.emit('updateRoomsList', getRoomsList(io.sockets.adapter.rooms));
-      io.to (user.room).emit ('newMessage', generateMessage ('Admin', `${user.name} has left`));
+      io.to (user.room).emit ('newMessage', generateMessage ('Admin', `${user.name} has left.`));
     }
   })
 });

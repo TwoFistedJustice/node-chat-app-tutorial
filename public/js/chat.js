@@ -64,13 +64,20 @@ socket.on('upateUserList', function(users){
 });
 
 socket.on('updateRoomsList', function(rooms){
-  console.log('line 67 updating rooms list', rooms);
+  var params = jQuery.deparam(window.location.search);
   var ul = jQuery('<ul></ul>');
   rooms.forEach(function(room){
-    ul.append(jQuery('<li></li>').text(room));
+    var li = jQuery('<li></li>').text(room);
+    li.click(function(){
+      // no need to emit a join event, as soon as the uri changes, socket.io takes care of changing the room
+      if (room !== params.room){
+        window.location.search = `?name=${params.name}&room=${room}`;
+      }
+      
+    });
+    ul.append(li);
   });
   jQuery('#rooms').html(ul);
-  
 });
 
 

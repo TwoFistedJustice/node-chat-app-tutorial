@@ -87,6 +87,23 @@ io.on ('connection', (socket) => {
     }
   })
   
+  socket.on('normalize-room', (room, callback) => {
+    if(isRealString(room)){
+      capitalize(room);
+      socket.emit('switch-room', room);
+    } else {
+      return callback('room name invalid');
+    }
+    
+  });
+  
+  
+  socket.on('exit', (data, callback) => {
+    console.log('line exit');
+    socket.disconnect();
+  });
+  
+  
   socket.on ('disconnect', () => {
     console.log ('Disonnected from client -- server.js io.on()');
     var user = users.removeUser (socket.id);

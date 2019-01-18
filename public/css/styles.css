@@ -89,6 +89,12 @@ button:disabled {
     padding: 10px
 }
 
+.form-menu {
+    margin: 3px 0;
+    padding: 1px;
+}
+
+
 .chat {
     display: flex
 }

@@ -1,10 +1,12 @@
 var socket = io(); // this creates our connection and the name is important
+// var validation = require('../../server/utils/validation');
 
 var scrollToBottom = function() {
   //see video 9-16
   // Selectors
   var messages = jQuery('#messages');
   var newMessage = messages.children('li:last-child');
+  
   // Heights
   var clientHeight = messages.prop('clientHeight'); //always a fixed value for a given viewport
   var scrollTop = messages.prop('scrollTop');
@@ -24,12 +26,19 @@ var scrollToBottom = function() {
   //   \n scrollHeight: ${scrollHeight}`);
 };
 
+
 var face = '◎[▪‿▪]◎';
 var face2 = '(づ｡◕‿‿◕｡)づ';
 var space27 = '                    ';
 var acknowledgement = function(data) {
   console.log ('Acknowledgment of message received!', data);
 };
+
+//jQuery variables
+var exitButton = jQuery('#exit');
+var makeRoom = jQuery('#make-room');
+
+
 
 //mustn't use arrow functions in client side bc not all browsers support it.
 socket.on('connect', function() {
@@ -38,16 +47,18 @@ socket.on('connect', function() {
   var params = jQuery.deparam(window.location.search);
   
   //validation is not added here because it adds unnecessary complexity due to browser/ES5 limitations
-  socket.emit('join', params, function(err) {
-    if (err){
-      alert(err);
-      window.location.href = '/';
-    } else {
-      console.log(face2, `no error`);
-    }
-  });
+  // socket.emit('join', params, returnToLogin(err));
+  
+socket.emit('join', params, function(err) {
+  if (err){
+    alert(err);
+    window.location.href = '/';
+  } else {
+    console.log(face2, `no error`);
+  }
 });
 
+});
 
 socket.on('disconnect', function () {
   console.log (`Disconnected from server${space27}${face2}\\n${space27}-- index.js`);
@@ -139,6 +150,8 @@ socket.on('newLocationMessage', function(message){
 });
 
 
+
+
 jQuery('#message-form').on('submit', function(e){
   e.preventDefault();
   
@@ -175,4 +188,30 @@ locationButton.on('click', function() {
    });
    
 });
+
+
+exitButton.click(function(){
+  socket.emit('exit');
+  window.location.href = '/';
+});
+
+makeRoom.click(function(){
+  //get the value of the input box
+  var params = jQuery.deparam(window.location.search);
+  var room = jQuery('#new-room').val();
+  // emit room to server for normalization - sent back via 'switch-room' event
+  socket.emit('normalize-room', room, function(err){
+    alert(err);
+  });
+});
+
+socket.on('switch-room', function(room){
+  var params = jQuery.deparam(window.location.search);
+      // no need to emit a join event, as soon as the uri changes, socket.io takes care of changing the room
+      if (room !== params.room){
+        window.location.search = `?name=${params.name}&room=${room}`;
+      }
+});
+
+
 

@@ -1,4 +1,4 @@
-This is my version of the Node-Chat-App from Andrew Meade's node course.
+This is my version of the Node-Chat-App from Andrew J. Meade's node course.
 
 The parts of this that are my work
 
